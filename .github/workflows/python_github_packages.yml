@@ -97,7 +97,7 @@ jobs:
           maturin-version: v1.7.4
           target: ${{ matrix.target }}
           command: build
-          args: --release -m python/Cargo.toml ${{ env.FEATURES_FLAG }} ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '--sdist' || '' }}
+          args: --release -m python/Cargo.toml ${{ env.FEATURES_FLAG }}
           before-script-linux: |
             yum install -y perl-IPC-Cmd
             # Special handling for ARM build
