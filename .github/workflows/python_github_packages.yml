@@ -76,15 +76,24 @@ jobs:
       - name: Setup Rust cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Update Cargo.lock to resolve dependency conflicts
+      - name: Fix arrow-arith/chrono dependency conflict
         run: |
+          # Create a patch section in Cargo.toml to force compatible versions
+          echo "" >> Cargo.toml
+          echo "[patch.crates-io]" >> Cargo.toml
+          echo "# Force compatible arrow and chrono versions to avoid the quarter() method conflict" >> Cargo.toml
+          echo 'arrow-arith = { version = "=52.1.0" }' >> Cargo.toml
+          echo 'chrono = { version = "=0.4.38" }' >> Cargo.toml
+
           # Remove existing Cargo.lock if it exists to force fresh resolution
           rm -f Cargo.lock
-          # Update dependencies to resolve arrow-arith/chrono conflicts
+
+          # Update dependencies with the patch
           cargo update
+
           # Show resolved versions for debugging
-          echo "Resolved dependency versions:"
-          cargo tree | grep -E "(arrow-|chrono)" | head -20 || true
+          echo "Resolved dependency versions after patching:"
+          cargo tree | grep -E "(arrow-arith|chrono)" | head -10 || true
 
       - name: Build wheel
         uses: messense/maturin-action@v1
