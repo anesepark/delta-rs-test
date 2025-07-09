@@ -15,11 +15,6 @@ defaults:
   run:
     working-directory: ./python
 
-env:
-  # For ease of development, we make rustls default. But for release we should
-  # use native TLS.
-  FEATURES_FLAG: --no-default-features --features native-tls
-
 jobs:
   validate-release-tag:
     name: Validate git tag
@@ -93,17 +88,14 @@ jobs:
 
       - name: Build wheel
         uses: messense/maturin-action@v1
+        env:
+          # Special handling for ARM build
+          CFLAGS_aarch64_unknown_linux_gnu: ${{ matrix.target == 'aarch64-unknown-linux-gnu' && '-D__ARM_ARCH=8' || '' }}
         with:
           maturin-version: v1.7.4
           target: ${{ matrix.target }}
           command: build
-          args: --release -m python/Cargo.toml ${{ env.FEATURES_FLAG }}
-          before-script-linux: |
-            yum install -y perl-IPC-Cmd
-            # Special handling for ARM build
-            if [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
-              export CFLAGS_aarch64_unknown_linux_gnu="-D__ARM_ARCH=8"
-            fi
+          args: --release -m python/Cargo.toml
 
       - name: Store the distribution packages
         uses: actions/upload-artifact@v4
