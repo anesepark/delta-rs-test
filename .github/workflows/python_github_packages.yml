@@ -54,9 +54,10 @@ jobs:
           - target: aarch64-apple-darwin
             os: macos-14
             name: macos-aarch64
-          - target: x86_64-pc-windows-msvc
-            os: windows-latest
-            name: windows-x86_64
+          # Temporarily disabled due to arrow-arith dependency conflict
+          # - target: x86_64-pc-windows-msvc
+          #   os: windows-latest
+          #   name: windows-x86_64
     runs-on: ${{ matrix.os }}
     needs: validate-release-tag
     if: always() && (needs.validate-release-tag.result == 'success' || github.event_name == 'workflow_dispatch')
@@ -80,10 +81,20 @@ jobs:
       - name: Setup Rust cache
         uses: Swatinem/rust-cache@v2
 
+      - name: Update Cargo.lock to resolve dependency conflicts
+        run: |
+          # Remove existing Cargo.lock if it exists to force fresh resolution
+          rm -f Cargo.lock
+          # Update dependencies to resolve arrow-arith/chrono conflicts
+          cargo update
+          # Show resolved versions for debugging
+          echo "Resolved dependency versions:"
+          cargo tree | grep -E "(arrow-|chrono)" | head -20 || true
+
       - name: Build wheel
         uses: messense/maturin-action@v1
         with:
-          maturin-version: v1.6.0
+          maturin-version: v1.7.4
           target: ${{ matrix.target }}
           command: build
           args: --release -m python/Cargo.toml ${{ env.FEATURES_FLAG }} ${{ matrix.target == 'x86_64-unknown-linux-gnu' && '--sdist' || '' }}
