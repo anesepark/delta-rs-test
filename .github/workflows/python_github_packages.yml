@@ -69,30 +69,26 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: default
-          toolchain: stable
+          toolchain: 1.75.0
           override: true
           components: rustfmt, clippy
 
       - name: Setup Rust cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Fix arrow-arith/chrono dependency conflict
+      - name: Prepare build environment
         run: |
-          # Try to force compatible versions by downgrading specific packages
-          # Remove existing Cargo.lock files to force fresh resolution
+          # Clean any existing lock files for fresh dependency resolution
           rm -f ../Cargo.lock
           rm -f Cargo.lock
 
-          # Force downgrade of problematic packages
-          cargo update --package arrow-arith --precise 52.1.0 || echo "Could not downgrade arrow-arith"
-          cargo update --package chrono --precise 0.4.38 || echo "Could not downgrade chrono"
+          # Show Rust version for debugging
+          rustc --version
+          cargo --version
 
-          # Update all other dependencies normally
-          cargo update
-
-          # Show resolved versions for debugging
-          echo "Resolved dependency versions:"
-          cargo tree | grep -E "(arrow-arith|chrono)" | head -10 || echo "No arrow/chrono dependencies found"
+          # Show initial dependency tree
+          echo "Initial dependency resolution:"
+          cargo tree --depth 1 | head -10 || echo "Could not show dependency tree"
 
       - name: Build wheel
         uses: messense/maturin-action@v1
