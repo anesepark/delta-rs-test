@@ -76,7 +76,7 @@ jobs:
       - name: Setup Rust cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Prepare build environment
+      - name: Fix dependency compatibility issues
         run: |
           # Clean any existing lock files for fresh dependency resolution
           rm -f ../Cargo.lock
@@ -86,8 +86,18 @@ jobs:
           rustc --version
           cargo --version
 
-          # Show initial dependency tree
-          echo "Initial dependency resolution:"
+          # Downgrade packages that require newer Rust versions to compatible versions
+          echo "Downgrading packages incompatible with Rust 1.75.0..."
+          cargo update icu_provider --precise 1.5.0 || echo "Could not downgrade icu_provider"
+          cargo update icu_locale_core --precise 1.5.0 || echo "Could not downgrade icu_locale_core"
+          cargo update icu_properties --precise 1.5.0 || echo "Could not downgrade icu_properties"
+          cargo update icu_normalizer --precise 1.5.0 || echo "Could not downgrade icu_normalizer"
+          cargo update icu_collections --precise 1.5.0 || echo "Could not downgrade icu_collections"
+          cargo update icu_properties_data --precise 1.5.0 || echo "Could not downgrade icu_properties_data"
+          cargo update icu_normalizer_data --precise 1.5.0 || echo "Could not downgrade icu_normalizer_data"
+
+          # Show dependency tree after fixes
+          echo "Dependency resolution after fixes:"
           cargo tree --depth 1 | head -10 || echo "Could not show dependency tree"
 
       - name: Build wheel
