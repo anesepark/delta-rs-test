@@ -77,18 +77,21 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Fix arrow-arith/chrono dependency conflict
+        working-directory: .
         run: |
-          # Create a patch section in Cargo.toml to force compatible versions
+          # Apply patch to workspace root Cargo.toml
           echo "" >> Cargo.toml
           echo "[patch.crates-io]" >> Cargo.toml
           echo "# Force compatible arrow and chrono versions to avoid the quarter() method conflict" >> Cargo.toml
           echo 'arrow-arith = { version = "=52.1.0" }' >> Cargo.toml
           echo 'chrono = { version = "=0.4.38" }' >> Cargo.toml
 
-          # Remove existing Cargo.lock if it exists to force fresh resolution
+          # Remove existing Cargo.lock files to force fresh resolution
           rm -f Cargo.lock
+          rm -f python/Cargo.lock
 
-          # Update dependencies with the patch
+          # Update dependencies with the patch from workspace root
+          cd python
           cargo update
 
           # Show resolved versions for debugging
