@@ -77,26 +77,22 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Fix arrow-arith/chrono dependency conflict
-        working-directory: .
         run: |
-          # Apply patch to workspace root Cargo.toml
-          echo "" >> Cargo.toml
-          echo "[patch.crates-io]" >> Cargo.toml
-          echo "# Force compatible arrow and chrono versions to avoid the quarter() method conflict" >> Cargo.toml
-          echo 'arrow-arith = { version = "=52.1.0" }' >> Cargo.toml
-          echo 'chrono = { version = "=0.4.38" }' >> Cargo.toml
-
+          # Try to force compatible versions by downgrading specific packages
           # Remove existing Cargo.lock files to force fresh resolution
+          rm -f ../Cargo.lock
           rm -f Cargo.lock
-          rm -f python/Cargo.lock
 
-          # Update dependencies with the patch from workspace root
-          cd python
+          # Force downgrade of problematic packages
+          cargo update --package arrow-arith --precise 52.1.0 || echo "Could not downgrade arrow-arith"
+          cargo update --package chrono --precise 0.4.38 || echo "Could not downgrade chrono"
+
+          # Update all other dependencies normally
           cargo update
 
           # Show resolved versions for debugging
-          echo "Resolved dependency versions after patching:"
-          cargo tree | grep -E "(arrow-arith|chrono)" | head -10 || true
+          echo "Resolved dependency versions:"
+          cargo tree | grep -E "(arrow-arith|chrono)" | head -10 || echo "No arrow/chrono dependencies found"
 
       - name: Build wheel
         uses: messense/maturin-action@v1
