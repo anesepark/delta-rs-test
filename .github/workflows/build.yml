@@ -20,7 +20,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: default
-          toolchain: '1.81'
+          toolchain: "1.81"
           override: true
 
       - name: Format
@@ -42,17 +42,17 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: default
-          toolchain: '1.81'
+          toolchain: "1.81"
           override: true
 
       - name: build and lint with clippy
-        run: cargo clippy --features ${{ env.DEFAULT_FEATURES }} --tests
+        run: cargo clippy --features --tests
 
       - name: Spot-check build for native-tls features
         run: cargo clippy --no-default-features --features azure,datafusion,s3-native-tls,gcs,glue --tests
 
       - name: Check docs
-        run: cargo doc --features ${{ env.DEFAULT_FEATURES }}
+        run: cargo doc --features --tests
 
       - name: Check no default features (except rustls)
         run: cargo check --no-default-features --features rustls
@@ -79,11 +79,11 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: default
-          toolchain: '1.81'
+          toolchain: "1.81"
           override: true
 
       - name: Run tests
-        run: cargo test --verbose --features ${{ env.DEFAULT_FEATURES }}
+        run: cargo test --verbose --features --tests
 
   integration_test:
     name: Integration Tests
@@ -114,7 +114,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: default
-          toolchain: '1.81'
+          toolchain: "1.81"
           override: true
 
       # Install Java and Hadoop for HDFS integration tests
@@ -134,7 +134,7 @@ jobs:
 
       - name: Run tests with rustls (default)
         run: |
-          cargo test --features integration_test,${{ env.DEFAULT_FEATURES }}
+          cargo test --features integration_test, --tests
 
       - name: Run tests with native-tls
         run: |
@@ -160,7 +160,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: default
-          toolchain: '1.81'
+          toolchain: "1.81"
           override: true
 
       - name: Download Lakectl
@@ -175,4 +175,3 @@ jobs:
       - name: Run tests with rustls (default)
         run: |
           cargo test --features integration_test_lakefs,lakefs,datafusion
-
