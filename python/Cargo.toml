@@ -43,7 +43,7 @@ tokio = { workspace = true, features = ["rt-multi-thread"] }
 
 # reqwest is pulled in by azure sdk, but not used by python binding itself
 # for binary wheel best practice, statically link openssl
-reqwest = { version = "*", features = ["native-tls-vendored"] }
+reqwest = { version = "=0.12.22", features = ["native-tls-vendored"] }
 
 deltalake-mount = { path = "../crates/mount" }
 
