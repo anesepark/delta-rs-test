@@ -131,7 +131,7 @@ jobs:
 
       - name: Run tests with rustls (default)
         run: |
-          cargo test --feaures integration_test
+          cargo test --features integration_test
 
       - name: Run tests with native-tls
         run: |
