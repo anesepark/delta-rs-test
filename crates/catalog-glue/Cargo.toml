@@ -13,8 +13,8 @@ rust-version.workspace = true
 
 [dependencies]
 async-trait = { workspace = true }
-aws-config = { version = "=1.8.0", default-features = false, features = ["behavior-version-latest", "rt-tokio", "sso"] }
-aws-sdk-glue = "=1.80.0"
+aws-config = { version = "=1.6.0", default-features = false, features = ["behavior-version-latest", "rt-tokio"] }
+aws-sdk-glue = "=1.60.0"
 deltalake-core = { version = "0.23.0", path = "../core" }
 thiserror = { workspace = true }
 
