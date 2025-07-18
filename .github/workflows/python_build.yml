@@ -19,6 +19,8 @@ jobs:
 
       - name: Setup Environment
         uses: ./.github/actions/setup-env
+        with:
+          rust-toolchain: "1.82"
 
       - name: Check Python
         run: |
@@ -42,6 +44,7 @@ jobs:
         uses: ./.github/actions/setup-env
         with:
           python-version: 3.9
+          rust-toolchain: "1.82"
 
       - name: Build and install deltalake
         run: |
@@ -66,6 +69,8 @@ jobs:
 
       - name: Setup Environment
         uses: ./.github/actions/setup-env
+        with:
+          rust-toolchain: "1.82"
 
       - name: Start emulated services
         run: docker compose up -d
@@ -84,7 +89,7 @@ jobs:
           uv pip uninstall pandas
           uv run --no-sync pytest -m "not pandas and not integration and not benchmark"
           uv pip install pandas
-  
+
   test-lakefs:
     name: Python Build (Python 3.10 LakeFS Integration tests)
     runs-on: ubuntu-latest
@@ -97,6 +102,8 @@ jobs:
 
       - name: Setup Environment
         uses: ./.github/actions/setup-env
+        with:
+          rust-toolchain: "1.82"
 
       - name: Start emulated services
         run: docker compose -f ../docker-compose-lakefs.yml up -d
@@ -122,6 +129,8 @@ jobs:
 
       - name: Setup Environment
         uses: ./.github/actions/setup-env
+        with:
+          rust-toolchain: "1.82"
 
       - uses: actions/setup-java@v2
         with:
@@ -133,7 +142,6 @@ jobs:
 
       - name: Run tests
         run: make test-pyspark
-
 
   multi-python-running:
     name: Running with Python ${{ matrix.python-version }}
@@ -153,6 +161,7 @@ jobs:
         uses: ./.github/actions/setup-env
         with:
           python-version: ${{ matrix.python-version }}
+          rust-toolchain: "1.82"
 
       - name: Build and install deltalake
         run: |
