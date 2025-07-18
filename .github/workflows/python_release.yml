@@ -52,6 +52,7 @@ jobs:
       - name: Publish to GitHub Packages (without sdist)
         uses: messense/maturin-action@v1
         env:
+          MATURIN_USERNAME: ${{ github.actor }}
           MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
         with:
@@ -74,6 +75,7 @@ jobs:
       - name: Publish to GitHub Packages (without sdist)
         uses: messense/maturin-action@v1
         env:
+          MATURIN_USERNAME: ${{ github.actor }}
           MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
         with:
@@ -96,6 +98,7 @@ jobs:
       - name: Publish manylinux to GitHub Packages x86_64 (with sdist)
         uses: messense/maturin-action@v1
         env:
+          MATURIN_USERNAME: ${{ github.actor }}
           MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
         with:
@@ -121,6 +124,7 @@ jobs:
       - name: Publish manylinux to GitHub Packages aarch64 (without sdist)
         uses: messense/maturin-action@v1
         env:
+          MATURIN_USERNAME: ${{ github.actor }}
           MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
         with:
@@ -147,6 +151,7 @@ jobs:
       - name: Publish manylinux to GitHub Packages aarch64 manylinux-2_28 (without sdist)
         uses: messense/maturin-action@v1
         env:
+          MATURIN_USERNAME: ${{ github.actor }}
           MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
         with:
