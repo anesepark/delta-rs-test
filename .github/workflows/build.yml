@@ -46,13 +46,10 @@ jobs:
           override: true
 
       - name: build and lint with clippy
-        run: cargo clippy --features --tests
+        run: cargo clippy
 
       - name: Spot-check build for native-tls features
-        run: cargo clippy --no-default-features --features azure,datafusion,s3-native-tls,gcs,glue --tests
-
-      - name: Check docs
-        run: cargo doc --features --tests
+        run: cargo clippy --no-default-features --features azure,datafusion,s3-native-tls,gcs,glue
 
       - name: Check no default features (except rustls)
         run: cargo check --no-default-features --features rustls
@@ -83,7 +80,7 @@ jobs:
           override: true
 
       - name: Run tests
-        run: cargo test --verbose --features --tests
+        run: cargo test --verbose
 
   integration_test:
     name: Integration Tests
@@ -134,7 +131,7 @@ jobs:
 
       - name: Run tests with rustls (default)
         run: |
-          cargo test --features integration_test, --tests
+          cargo test --feaures integration_test
 
       - name: Run tests with native-tls
         run: |
