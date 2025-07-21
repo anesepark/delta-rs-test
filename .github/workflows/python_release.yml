@@ -49,16 +49,20 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - name: Publish to GitHub Packages (without sdist)
+      - name: Build with maturin
         uses: messense/maturin-action@v1
-        env:
-          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
-          MATURIN_USERNAME: ${{ github.actor }}
-          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: ${{ matrix.target }}
-          command: publish
-          args: --skip-existing -m python/Cargo.toml --no-sdist
+          command: build
+          args: --release -m python/Cargo.toml --out dist
+
+      - name: Upload to GitHub Packages
+        run: |
+          python -m pip install twine
+          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
+        env:
+          TWINE_USERNAME: ${{ github.actor }}
+          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
   release-github-packages-windows:
     needs: validate-release-tag
@@ -72,16 +76,20 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - name: Publish to GitHub Packages (without sdist)
+      - name: Build with maturin
         uses: messense/maturin-action@v1
-        env:
-          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
-          MATURIN_USERNAME: ${{ github.actor }}
-          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: x86_64-pc-windows-msvc
-          command: publish
-          args: --skip-existing -m python/Cargo.toml --no-sdist
+          command: build
+          args: --release -m python/Cargo.toml --out dist
+
+      - name: Upload to GitHub Packages
+        run: |
+          python -m pip install twine
+          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
+        env:
+          TWINE_USERNAME: ${{ github.actor }}
+          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
   release-github-packages-manylinux-x86-64:
     needs: validate-release-tag
