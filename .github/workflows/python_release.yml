@@ -49,23 +49,16 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - name: Build with maturin
+      - name: Publish to GitHub Packages (without sdist)
         uses: messense/maturin-action@v1
+        env:
+          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
+          MATURIN_USERNAME: ${{ github.actor }}
+          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: ${{ matrix.target }}
-          command: build
-          args: --release -m python/Cargo.toml
-
-      - name: Upload to GitHub Packages
-        run: |
-          python -m pip install twine
-          echo "Repository: ${{ github.repository }}"
-          echo "Actor: ${{ github.actor }}"
-          ls -la ../target/wheels/
-          python -m twine upload --verbose --repository-url https://upload.pkg.github.com/ ../target/wheels/*.whl
-        env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          command: publish
+          args: --skip-existing -m python/Cargo.toml --no-sdist
 
   release-github-packages-windows:
     needs: validate-release-tag
@@ -79,20 +72,16 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - name: Build with maturin
+      - name: Publish to GitHub Packages (without sdist)
         uses: messense/maturin-action@v1
+        env:
+          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
+          MATURIN_USERNAME: ${{ github.actor }}
+          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: x86_64-pc-windows-msvc
-          command: build
-          args: --release -m python/Cargo.toml
-
-      - name: Upload to GitHub Packages
-        run: |
-          python -m pip install twine
-          python -m twine upload --repository-url https://upload.pkg.github.com/${{ github.repository }}/ ../target/wheels/*.whl
-        env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          command: publish
+          args: --skip-existing -m python/Cargo.toml --no-sdist
 
   release-github-packages-manylinux-x86-64:
     needs: validate-release-tag
