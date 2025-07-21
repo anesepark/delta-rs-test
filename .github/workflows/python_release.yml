@@ -49,25 +49,16 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install maturin twine
-
-      - name: Build with maturin
-        run: |
-          maturin build --release --target ${{ matrix.target }} -o dist
-
-      - name: Publish to GitHub Packages
-        run: |
-          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
+      - name: Publish to GitHub Packages (without sdist)
+        uses: messense/maturin-action@v1
         env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GH_PAT }}
+          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
+          MATURIN_USERNAME: ${{ github.actor }}
+          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
+        with:
+          target: ${{ matrix.target }}
+          command: publish
+          args: --skip-existing -m python/Cargo.toml --no-sdist
 
   release-github-packages-windows:
     needs: validate-release-tag
@@ -81,25 +72,16 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install maturin twine
-
-      - name: Build with maturin
-        run: |
-          maturin build --release --target x86_64-pc-windows-msvc -o dist
-
-      - name: Publish to GitHub Packages
-        run: |
-          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
+      - name: Publish to GitHub Packages (without sdist)
+        uses: messense/maturin-action@v1
         env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GH_PAT }}
+          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
+          MATURIN_USERNAME: ${{ github.actor }}
+          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
+        with:
+          target: x86_64-pc-windows-msvc
+          command: publish
+          args: --skip-existing -m python/Cargo.toml --no-sdist
 
   release-github-packages-manylinux-x86-64:
     needs: validate-release-tag
@@ -113,29 +95,19 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install maturin twine
-
-      - name: Install system dependencies
-        run: |
-          sudo yum install -y perl-IPC-Cmd
-
-      - name: Build with maturin
-        run: |
-          maturin build --release --target x86_64-unknown-linux-gnu -o dist
-
-      - name: Publish to GitHub Packages
-        run: |
-          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
+      - name: Publish manylinux to GitHub Packages x86_64 (with sdist)
+        uses: messense/maturin-action@v1
         env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GH_PAT }}
+          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
+          MATURIN_USERNAME: ${{ github.actor }}
+          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
+        with:
+          maturin-version: v1.6.0 # https://github.com/PyO3/maturin/issues/2154
+          target: x86_64-unknown-linux-gnu
+          command: publish
+          args: --skip-existing -m python/Cargo.toml
+          # for openssl build
+          before-script-linux: yum install -y perl-IPC-Cmd
 
   release-github-packages-manylinux-217-aarch64:
     needs: validate-release-tag
@@ -149,29 +121,20 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - uses: actions/setup-python@v5
+      - name: Publish manylinux to GitHub Packages aarch64 (without sdist)
+        uses: messense/maturin-action@v1
+        env:
+          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
+          MATURIN_USERNAME: ${{ github.actor }}
+          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
         with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install maturin twine
-
-      - name: Build with maturin
-        env:
-          # We can remove this once we upgrade to 2_28.
-          # https://github.com/briansmith/ring/issues/1728
-          CFLAGS_aarch64_unknown_linux_gnu: "-D__ARM_ARCH=8"
-        run: |
-          maturin build --release --target aarch64-unknown-linux-gnu -o dist
-
-      - name: Publish to GitHub Packages
-        run: |
-          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
-        env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GH_PAT }}
+          target: aarch64-unknown-linux-gnu
+          command: publish
+          args: --skip-existing -m python/Cargo.toml --no-sdist
+          before-script-linux: |
+            # We can remove this once we upgrade to 2_28.
+            # https://github.com/briansmith/ring/issues/1728
+            export CFLAGS_aarch64_unknown_linux_gnu="-D__ARM_ARCH=8"
 
   release-github-packages-manylinux-228-aarch64:
     needs: validate-release-tag
@@ -185,26 +148,14 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - uses: actions/setup-python@v5
+      - name: Publish manylinux to GitHub Packages aarch64 manylinux-2_28 (without sdist)
+        uses: messense/maturin-action@v1
+        env:
+          MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
+          MATURIN_USERNAME: ${{ github.actor }}
+          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
         with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install maturin twine
-
-      - name: Build with maturin
-        env:
-          # We can remove this once we upgrade to 2_28.
-          # https://github.com/briansmith/ring/issues/1728
-          CFLAGS_aarch64_unknown_linux_gnu: "-D__ARM_ARCH=8"
-        run: |
-          maturin build --release --target aarch64-unknown-linux-gnu --manylinux 2_28 -o dist
-
-      - name: Publish to GitHub Packages
-        run: |
-          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
-        env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GH_PAT }}
+          target: aarch64-unknown-linux-gnu
+          command: publish
+          args: --skip-existing -m python/Cargo.toml --no-sdist
+          manylinux: "2_28"
