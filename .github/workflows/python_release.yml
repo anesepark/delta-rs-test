@@ -54,7 +54,7 @@ jobs:
         env:
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
           MATURIN_USERNAME: ${{ github.actor }}
-          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
+          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: ${{ matrix.target }}
           command: publish
@@ -77,7 +77,7 @@ jobs:
         env:
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
           MATURIN_USERNAME: ${{ github.actor }}
-          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
+          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: x86_64-pc-windows-msvc
           command: publish
@@ -100,7 +100,7 @@ jobs:
         env:
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
           MATURIN_USERNAME: ${{ github.actor }}
-          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
+          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           maturin-version: v1.6.0 # https://github.com/PyO3/maturin/issues/2154
           target: x86_64-unknown-linux-gnu
@@ -126,7 +126,7 @@ jobs:
         env:
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
           MATURIN_USERNAME: ${{ github.actor }}
-          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
+          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: aarch64-unknown-linux-gnu
           command: publish
@@ -153,7 +153,7 @@ jobs:
         env:
           MATURIN_REPOSITORY_URL: https://upload.pkg.github.com/
           MATURIN_USERNAME: ${{ github.actor }}
-          MATURIN_PASSWORD: ${{ secrets.GH_PAT }}
+          MATURIN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: aarch64-unknown-linux-gnu
           command: publish
