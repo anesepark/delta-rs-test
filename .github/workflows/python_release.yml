@@ -54,12 +54,12 @@ jobs:
         with:
           target: ${{ matrix.target }}
           command: build
-          args: --release -m python/Cargo.toml --out dist
+          args: --release -m python/Cargo.toml
 
       - name: Upload to GitHub Packages
         run: |
           python -m pip install twine
-          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
+          python -m twine upload --repository-url https://upload.pkg.github.com/ ../target/wheels/*.whl
         env:
           TWINE_USERNAME: ${{ github.actor }}
           TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
@@ -81,12 +81,12 @@ jobs:
         with:
           target: x86_64-pc-windows-msvc
           command: build
-          args: --release -m python/Cargo.toml --out dist
+          args: --release -m python/Cargo.toml
 
       - name: Upload to GitHub Packages
         run: |
           python -m pip install twine
-          python -m twine upload --repository-url https://upload.pkg.github.com/ dist/*.whl
+          python -m twine upload --repository-url https://upload.pkg.github.com/ ../target/wheels/*.whl
         env:
           TWINE_USERNAME: ${{ github.actor }}
           TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
