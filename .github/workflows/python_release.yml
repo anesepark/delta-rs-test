@@ -55,6 +55,11 @@ jobs:
           target: ${{ matrix.target }}
           command: build
           args: --release -m python/Cargo.toml
+        env:
+          # Prevent maturin from trying to upload automatically
+          MATURIN_REPOSITORY_URL: ""
+          MATURIN_USERNAME: ""
+          MATURIN_PASSWORD: ""
 
       - name: Publish to GitHub Packages
         env:
@@ -81,6 +86,11 @@ jobs:
           target: x86_64-pc-windows-msvc
           command: build
           args: --release -m python/Cargo.toml
+        env:
+          # Prevent maturin from trying to upload automatically
+          MATURIN_REPOSITORY_URL: ""
+          MATURIN_USERNAME: ""
+          MATURIN_PASSWORD: ""
 
       - name: Publish to GitHub Packages
         env:
@@ -110,6 +120,11 @@ jobs:
           args: --release -m python/Cargo.toml
           # for openssl build
           before-script-linux: yum install -y perl-IPC-Cmd
+        env:
+          # Prevent maturin from trying to upload automatically
+          MATURIN_REPOSITORY_URL: ""
+          MATURIN_USERNAME: ""
+          MATURIN_PASSWORD: ""
 
       - name: Publish to GitHub Packages
         env:
@@ -140,6 +155,11 @@ jobs:
             # We can remove this once we upgrade to 2_28.
             # https://github.com/briansmith/ring/issues/1728
             export CFLAGS_aarch64_unknown_linux_gnu="-D__ARM_ARCH=8"
+        env:
+          # Prevent maturin from trying to upload automatically
+          MATURIN_REPOSITORY_URL: ""
+          MATURIN_USERNAME: ""
+          MATURIN_PASSWORD: ""
 
       - name: Publish to GitHub Packages
         env:
@@ -170,6 +190,11 @@ jobs:
             # We can remove this once we upgrade to 2_28.
             # https://github.com/briansmith/ring/issues/1728
             export CFLAGS_aarch64_unknown_linux_gnu="-D__ARM_ARCH=8"
+        env:
+          # Prevent maturin from trying to upload automatically
+          MATURIN_REPOSITORY_URL: ""
+          MATURIN_USERNAME: ""
+          MATURIN_PASSWORD: ""
 
       - name: Publish to GitHub Packages
         env:
