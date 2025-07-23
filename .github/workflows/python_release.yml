@@ -66,7 +66,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install twine
-          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload ../target/wheels/*
+          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ../target/wheels/*
 
   release-github-packages-windows:
     needs: validate-release-tag
@@ -97,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install twine
-          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload ../target/wheels/*
+          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ../target/wheels/*
 
   release-github-packages-manylinux-x86-64:
     needs: validate-release-tag
@@ -119,7 +119,7 @@ jobs:
           command: build
           args: --release -m python/Cargo.toml
           # for openssl build
-          before-script-linux: yum install -y perl-IPC-Cmd
+          before-script-linux: apt-get update && apt-get install -y perl
         env:
           # Prevent maturin from trying to upload automatically
           MATURIN_REPOSITORY_URL: ""
@@ -131,7 +131,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install twine
-          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload ../target/wheels/*
+          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ../target/wheels/*
 
   release-github-packages-manylinux-217-aarch64:
     needs: validate-release-tag
@@ -166,7 +166,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install twine
-          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload ../target/wheels/*
+          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ../target/wheels/*
 
   release-github-packages-manylinux-228-aarch64:
     needs: validate-release-tag
@@ -201,4 +201,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install twine
-          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload ../target/wheels/*
+          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ../target/wheels/*
