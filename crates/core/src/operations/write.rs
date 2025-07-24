@@ -1014,7 +1014,6 @@ impl std::future::IntoFuture for WriteBuilder {
                         .apply_column_metadata_to_protocol(&schema_struct)?
                         .move_table_properties_into_features(&configuration);
 
-                    
                     let mut metadata =
                         Metadata::try_new(schema_struct, partition_columns.clone(), configuration)?;
                     let existing_metadata_id = snapshot.metadata().id.clone();

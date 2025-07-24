@@ -88,8 +88,6 @@ where
     serde_json::from_str(&s).map_err(DeError::custom)
 }
 
-
-
 fn is_absolute_path(path: &str) -> DeltaResult<bool> {
     match Url::parse(path) {
         Ok(_) => Ok(true),
