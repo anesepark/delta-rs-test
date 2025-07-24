@@ -1,10 +1,10 @@
 """Tests that deltalake(delta-rs) can write to tables written by PySpark."""
 
+import os
 import pathlib
 
 import pyarrow as pa
 import pytest
-import os
 
 from deltalake import DeltaTable, write_deltalake
 from deltalake.exceptions import DeltaProtocolError

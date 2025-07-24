@@ -7,11 +7,10 @@ name = "deltalake"
 description = "Native Delta Lake Python binding based on delta-rs with Pandas integration"
 readme = "README.md"
 
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["deltalake", "delta", "datalake", "pandas", "arrow"]
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -103,3 +102,8 @@ markers = [
 [tool.coverage.run]
 branch = true
 source = ["deltalake"]
+
+[dependency-groups]
+dev = [
+    "ruff==0.5.2",
+]
