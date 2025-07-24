@@ -5,7 +5,7 @@ inputs:
   python-version:
     description: "The Python version to set up"
     required: true
-    default: "3.10"
+    default: "3.10.18"
 
   rust-toolchain:
     description: "The Rust toolchain to set up"
@@ -23,7 +23,7 @@ runs:
       uses: astral-sh/setup-uv@v3
 
     - name: Set up Python ${{ inputs.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v3
       with:
         python-version: "${{ inputs.python-version }}"
 
