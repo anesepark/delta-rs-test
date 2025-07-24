@@ -20,6 +20,7 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-env
         with:
+          python-version: 3.10
           rust-toolchain: "1.82"
 
       - name: Check Python
@@ -70,6 +71,7 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-env
         with:
+          python-version: 3.10
           rust-toolchain: "1.82"
 
       - name: Start emulated services
@@ -103,6 +105,7 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-env
         with:
+          python-version: 3.10
           rust-toolchain: "1.82"
 
       - name: Start emulated services
@@ -132,6 +135,7 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-env
         with:
+          python-version: 3.10
           rust-toolchain: "1.82"
 
       - uses: actions/setup-java@v4
