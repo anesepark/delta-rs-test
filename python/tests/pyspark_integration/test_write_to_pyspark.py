@@ -9,7 +9,7 @@ import os
 from deltalake import DeltaTable, write_deltalake
 from deltalake.exceptions import DeltaProtocolError
 
-from .utils import assert_spark_read_equal, get_spark
+from .utils import assert_spark_read_equal, get_spark, run_stream_with_checkpoint
 
 try:
     import delta
@@ -171,6 +171,7 @@ def test_spark_read_z_ordered_history(tmp_path: pathlib.Path):
 
     assert latest_operation_metrics["operationMetrics"] is not None
 
+
 @pytest.mark.pyspark
 @pytest.mark.integration
 def test_spark_read_repair_run(tmp_path):
@@ -197,6 +198,7 @@ def test_spark_read_repair_run(tmp_path):
     )
 
     assert latest_operation_metrics["operationMetrics"] is not None
+
 
 @pytest.mark.pyspark
 @pytest.mark.integration

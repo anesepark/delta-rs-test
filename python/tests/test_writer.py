@@ -2032,6 +2032,7 @@ def test_write_structs(tmp_path: pathlib.Path):
     new_df = pl.scan_pyarrow_dataset(arrow_dt)
     new_df.collect()
 
+
 def test_write_schema_evolved_same_metadata_id(tmp_path):
     """https://github.com/delta-io/delta-rs/issues/3274"""
 

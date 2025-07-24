@@ -49,6 +49,7 @@ def assert_spark_read_equal(
         .drop(incompatible_types, axis="columns", errors="ignore"),
     )
 
+
 def run_stream_with_checkpoint(source_table: str):
     spark = get_spark()
 
